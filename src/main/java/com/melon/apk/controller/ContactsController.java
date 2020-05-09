@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.melon.apk.entity.Contacts;
 import com.melon.apk.mapper.ContactsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/contacts")
 @RestController
@@ -24,9 +21,17 @@ public class ContactsController {
      * phone name模糊
      */
     @GetMapping("/{content}")
-    public Object selectContacts(@PathVariable String content) {
+    public Object queryContacts(@PathVariable String content) {
         QueryWrapper<Contacts> query = new QueryWrapper<>();
         query.like("phone", content).or().like("name", content);
         return contactsMapper.selectList(query);
+    }
+
+    /**
+     * 添加联系人
+     */
+    @PostMapping
+    public Object addContacts(Contacts contacts){
+        return contactsMapper.insert(contacts);
     }
 }

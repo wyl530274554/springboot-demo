@@ -10,4 +10,5 @@ public class Contacts {
     private Long id;
     private String name;
     private String phone;
+    private Boolean isDeleted;
 }
