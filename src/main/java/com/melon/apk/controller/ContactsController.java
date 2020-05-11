@@ -31,7 +31,13 @@ public class ContactsController {
      * 添加联系人
      */
     @PostMapping
-    public Object addContacts(Contacts contacts){
+    public Object addContacts(Contacts contacts) {
+        QueryWrapper<Contacts> queryMapper = new QueryWrapper<>();
+        queryMapper.eq("phone", contacts.getPhone());
+        Integer integer = contactsMapper.selectCount(queryMapper);
+        if (integer > 0) {
+            return "手机号已存在";
+        }
         return contactsMapper.insert(contacts);
     }
 }

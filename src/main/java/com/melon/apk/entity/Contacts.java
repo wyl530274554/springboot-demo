@@ -11,4 +11,8 @@ public class Contacts {
     private String name;
     private String phone;
     private Boolean isDeleted;
+
+    public String getPhone() {
+        return phone;
+    }
 }
