@@ -12,6 +12,14 @@ public class Note {
     private String user;
     private String createTime;
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
     public void setUser(String user) {
         this.user = user;
     }

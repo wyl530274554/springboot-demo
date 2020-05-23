@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +57,10 @@ public class NoteController {
     public void insert(Note note, HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         String sessionId = request.getSession().getId();
         note.setUser(sessionId == null ? "访客：" : "访客：" + sessionId.substring(0, 5));
+        if(StringUtils.isEmpty(note.getContent())) {
+            note.setContent("此人是傻吊，不写内容");
+        }
+
         noteMapper.insert(note);
         topics = selectAll();
         model.addAttribute("topics", topics);
