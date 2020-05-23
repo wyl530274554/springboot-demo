@@ -57,7 +57,7 @@ public class NoteController {
     public void insert(Note note, HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         String sessionId = request.getSession().getId();
         note.setUser(sessionId == null ? "访客：" : "访客：" + sessionId.substring(0, 5));
-        if(StringUtils.isEmpty(note.getContent())) {
+        if(StringUtils.isEmpty(note.getContent().trim())) {
             note.setContent("此人是傻吊，不写内容");
         }
 
