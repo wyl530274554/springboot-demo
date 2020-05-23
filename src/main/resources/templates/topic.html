@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>随意聊</title>
+</head>
+
+<body>
+<H1>尬聊阁</H1>
+<p th:each="topic:${topics}">
+    <span style="font-size: 10px; width: 100px; display:inline-block" th:text="${topic.user}"></span>
+    <span style="font-size: 10px; width: 150px; display:inline-block" th:text="${topic.createTime}"></span>
+    <span style="font-size: 24px" th:text="${topic.content}"></span>
+</p>
+<br/>
+<form action="topic" method="post">
+    <p> 输入内容: &nbsp;&nbsp;&nbsp;
+        <input type="text" name="content" style="height: 50px; width: 250px; display:inline-block"/>
+        &nbsp;&nbsp;&nbsp;
+        <input type="submit" value="提交" style="height: 55px; width: 100px; display:inline-block"/>
+    </p>
+</form>
+
+</body>
+
+</html>

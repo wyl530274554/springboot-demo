@@ -15,4 +15,12 @@ public class Note {
     public void setUser(String user) {
         this.user = user;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }
