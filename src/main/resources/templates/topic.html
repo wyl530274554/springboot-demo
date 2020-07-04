@@ -6,7 +6,6 @@
 </head>
 
 <body>
-<H1>尬聊阁</H1>
 <p th:each="topic:${topics}">
     <span style="font-size: 10px; width: 100px; display:inline-block" th:text="${topic.user}"></span>
     <span style="font-size: 10px; width: 150px; display:inline-block" th:text="${topic.createTime}"></span>
