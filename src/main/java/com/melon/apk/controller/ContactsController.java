@@ -31,6 +31,7 @@ public class ContactsController {
      * 添加联系人
      */
     @PostMapping
+    @ResponseBody
     public Object addContacts(Contacts contacts) {
         QueryWrapper<Contacts> queryMapper = new QueryWrapper<>();
         queryMapper.eq("phone", contacts.getPhone());
