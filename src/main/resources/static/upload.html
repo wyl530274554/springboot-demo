@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传APK</title>
+</head>
+<body>
+
+<form id="app" method="post" action="http://192.168.100.234/apk" enctype="multipart/form-data">
+    <!--<div id="app" style="display:none;">
+        <input type="text" v-model="content">
+        <p>你好： {{content.toUpperCase()}}</p>
+    </div>-->
+
+    <p>上传APK文件</p>
+    <br>
+    <br>
+    <label name="code">版本Code：{{code}}</label>
+    <br>
+    <br>
+    <label name="name">文件名：{{fileName}}</label>
+    <br>
+    <br>
+    <input name="apkFile" type="file" @change="fileSelected($event)">
+    <input name="submit" type="button" value="上传" @click="upload"/>
+</form>
+
+<!--引入VUE.JS-->
+<script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="http://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+<link rel="stylesheet" href="http://unpkg.com/view-design/dist/styles/iview.css">
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            code:0,
+            fileName:''
+        },
+        methods: {
+            fileSelected(event){
+                //文件选中完成，赋值
+                const inputFile = event.target.files[0];
+                this.fileName = inputFile.name;
+                this.code = inputFile.name.split("_")[2].replace(".apk","");
+            },
+
+            upload(){
+                //用axios上传文件
+                let formData = new FormData();
+                formData.append('apkFile', document.querySelector('input[type=file]').files[0]);
+                formData.append("code", this.code);
+                formData.append("name", this.fileName);
+                let options = {  // 设置axios的参数
+                    url: 'http://192.168.100.234/apk',
+                    data: formData,
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                };
+                axios(options).then((res) => {
+                    if(res.data === 1) {
+                    this.$Message.info('上传成功');
+                }
+            })
+            }
+        }
+    })
+</script>
+</body>
+</html>
