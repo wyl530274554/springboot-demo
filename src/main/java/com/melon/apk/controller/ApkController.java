@@ -44,8 +44,7 @@ public class ApkController {
     @CrossOrigin
     @PostMapping("/apk")
     public Object insertApkVersion(Apk apk, MultipartFile apkFile) throws Exception {
-        File file = new File("C:\\AppServ\\www\\"+apk.getName());
-        FileUtil.createMissingParentDirectories(file);
+        File file = new File("/home/melon/file/"+apk.getName());
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(apkFile.getBytes());
         fileOutputStream.close();
