@@ -1,5 +1,7 @@
 package com.melon.apk.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.melon.apk.entity.Contacts;
 import com.melon.apk.entity.Password;
 import com.melon.apk.mapper.PasswordMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,20 @@ public class PasswordController {
      * patch局部更新
      * put完整更新
      */
-    @GetMapping
+    @GetMapping("/all")
     public Object getAllPassword() {
         return passwordMapper.selectList(null);
+    }
+
+    /**
+     * 查询
+     * 模糊
+     */
+    @GetMapping("/{content}")
+    public Object queryContacts(@PathVariable String content) {
+        QueryWrapper<Password> query = new QueryWrapper<>();
+        query.like("title", content);
+        return passwordMapper.selectList(query);
     }
 
     /**
