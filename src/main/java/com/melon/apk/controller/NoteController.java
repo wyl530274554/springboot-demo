@@ -58,7 +58,8 @@ public class NoteController {
         String sessionId = request.getSession().getId();
         note.setUser(sessionId == null ? "访客：" : "访客：" + sessionId.substring(0, 5));
         if(StringUtils.isEmpty(note.getContent().trim())) {
-            note.setContent("此人是傻吊，不写内容");
+            response.sendRedirect("topic");
+            return;
         }
 
         noteMapper.insert(note);
