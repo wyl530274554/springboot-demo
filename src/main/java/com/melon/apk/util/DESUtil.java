@@ -1,79 +1,93 @@
 package com.melon.apk.util;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import java.security.Key;
-import java.security.SecureRandom;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+
+import java.util.Base64;
 
 public class DESUtil {
-    private static Key sKey;
-    //设置秘钥key
-    private static final String KEY_STR = "91Pc^78%";
-    private static final String CHARSET_NAME = "UTF-8";
+
+    /**
+     * 偏移变量，固定占8位字节
+     */
+    private final static String IV_PARAMETER = "12345678";
+    /**
+     * 密钥算法
+     */
     private static final String ALGORITHM = "DES";
+    /**
+     * 加密/解密算法-工作模式-填充模式
+     */
+    private static final String CIPHER_ALGORITHM = "DES/CBC/PKCS5Padding";
+    /**
+     * 默认编码
+     */
+    private static final String CHARSET = "utf-8";
+    /**
+     * 设置秘钥key
+     */
+    private static final String KEY_STR = "91Pc^78%";
+    /**
+     * 加密器
+     */
+    private static Cipher sEncryptCipher;
+    /**
+     * 解密器
+     */
+    private static Cipher sDecryptCipher;
 
     static {
         try {
-            //生成DES算法对象
-            KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
-            //运用SHA1安全策略
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            //设置上密钥种子
-            secureRandom.setSeed(KEY_STR.getBytes());
-            //初始化基于SHA1的算法对象
-            generator.init(secureRandom);
-            //生成密钥对象
-            sKey = generator.generateKey();
-            generator = null;
+            DESKeySpec dks = new DESKeySpec(KEY_STR.getBytes(CHARSET));
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
+            SecretKey sSecretKey = keyFactory.generateSecret(dks);
+
+            IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(CHARSET));
+
+            sEncryptCipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            sEncryptCipher.init(Cipher.ENCRYPT_MODE, sSecretKey, iv);
+
+            sDecryptCipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            sDecryptCipher.init(Cipher.DECRYPT_MODE, sSecretKey, iv);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * DES加密字符串
+     *
+     * @param data 待加密字符串
+     * @return 加密后内容
+     */
+    public static String encrypt(String data) {
+        try {
+            byte[] bytes = sEncryptCipher.doFinal(data.getBytes(CHARSET));
+            //JDK1.8及以上可直接使用Base64（Android需要API26），JDK1.7及以下可以使用BASE64Encoder
+            //Android平台也可以使用android.util.Base64
+            return new String(Base64.getEncoder().encode(bytes));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return data;
         }
     }
 
     /**
-     * 加密
+     * DES解密字符串
+     *
+     * @param data 待解密字符串
+     * @return 解密后内容
      */
-    public static String encrypt(String str) {
-        //基于BASE64编码，接收byte[]并转换成String
-        BASE64Encoder base64Encoder = new BASE64Encoder();
+    public static String decrypt(String data) {
         try {
-            // 按UTF8编码
-            byte[] bytes = str.getBytes(CHARSET_NAME);
-            // 获取加密对象
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            // 初始化密码信息
-            cipher.init(Cipher.ENCRYPT_MODE, sKey);
-            // 加密
-            byte[] doFinal = cipher.doFinal(bytes);
-            // byte[]to encode好的String并返回
-            return base64Encoder.encode(doFinal);
+            return new String(sDecryptCipher.doFinal(Base64.getDecoder().decode(data.getBytes(CHARSET))), CHARSET);
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 解密
-     */
-    public static String decrypt(String str) {
-        // 基于BASE64编码，接收byte[]并转换成String
-        BASE64Decoder base64decoder = new BASE64Decoder();
-        try {
-            // 将字符串decode成byte[]
-            byte[] bytes = base64decoder.decodeBuffer(str);
-            // 获取解密对象
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            // 初始化解密信息
-            cipher.init(Cipher.DECRYPT_MODE, sKey);
-            // 解密
-            byte[] doFinal = cipher.doFinal(bytes);
-            // 返回解密之后的信息
-            return new String(doFinal, CHARSET_NAME);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return data;
         }
     }
 }
