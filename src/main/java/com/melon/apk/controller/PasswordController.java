@@ -3,8 +3,11 @@ package com.melon.apk.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.melon.apk.entity.Password;
 import com.melon.apk.mapper.PasswordMapper;
+import com.melon.apk.util.DESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/password")
 @RestController
@@ -35,7 +38,16 @@ public class PasswordController {
     public Object queryContacts(@PathVariable String content) {
         QueryWrapper<Password> query = new QueryWrapper<>();
         query.like("title", content);
-        return passwordMapper.selectList(query);
+
+        List<Password> passwords = passwordMapper.selectList(query);
+
+        //加密密码
+        for (Password pwd : passwords) {
+            String pass = pwd.getPwd();
+            pwd.setPwd(DESUtil.encrypt(pass));
+        }
+
+        return passwords;
     }
 
     /**
