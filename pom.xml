@@ -48,11 +48,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.65.Final</version>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -83,6 +78,19 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>alimaven</id>
+            <url>http://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>alimaven</id>
+            <url>http://maven.aliyun.com/repository/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <!--生成打包后的jar包的名字-->
         <finalName>ROOT</finalName>
@@ -97,7 +105,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <url>http://192.168.100.234:80/manager/text</url>
+                    <url>http://192.168.31.234:80/manager/text</url>
                     <username>tomcat</username>
                     <password>tomcat</password>
                     <path>/</path>
