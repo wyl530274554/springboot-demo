@@ -84,7 +84,9 @@ public class DESUtil {
      */
     public static String decrypt(String data) {
         try {
-            return new String(sDecryptCipher.doFinal(Base64.getDecoder().decode(data.getBytes(CHARSET))), CHARSET);
+            //用Base64.getMimeDecoder而非Base64.getDecoder是因为Android过来的编码串最后一个字符是\n
+            byte[] decode = Base64.getMimeDecoder().decode(data);
+            return new String(sDecryptCipher.doFinal(decode), CHARSET);
         } catch (Exception e) {
             e.printStackTrace();
             return data;

@@ -7,7 +7,7 @@ class DESUtilTest {
     void encrypt() {
         String encrypt = DESUtil.encrypt("所以针对保密级别特别高的数据推荐使用非对称加密算法。");
         System.out.println("encrypt: " + encrypt);
-        String decrypt = DESUtil.decrypt(encrypt);
+        String decrypt = DESUtil.decrypt("MQcCIpYeRXs=");
         System.out.println("decrypt: " + decrypt);
     }
 

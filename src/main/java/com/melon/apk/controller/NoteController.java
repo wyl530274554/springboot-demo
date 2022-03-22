@@ -1,6 +1,5 @@
 package com.melon.apk.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.melon.apk.entity.Note;
 import com.melon.apk.mapper.NoteMapper;
@@ -10,16 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,9 +50,9 @@ public class NoteController {
      */
     @PostMapping
     public void insert(Note note, HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-        String sessionId = request.getSession().getId();
-        note.setUser(sessionId == null ? "访客：" : "访客：" + sessionId.substring(0, 5));
-        if(StringUtils.isEmpty(note.getContent().trim())) {
+        String user = request.getRemoteHost();
+        note.setUser(StringUtils.isEmpty(user) ? "访客：未知" : "访客：" + user);
+        if (StringUtils.isEmpty(note.getContent().trim())) {
             response.sendRedirect("topic");
             return;
         }

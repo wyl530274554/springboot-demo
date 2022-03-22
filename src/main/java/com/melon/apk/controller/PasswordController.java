@@ -71,6 +71,9 @@ public class PasswordController {
      */
     @PostMapping
     public Object addPassword(Password password) {
+        String decrypt = DESUtil.decrypt(password.getPwd());
+        String log = decrypt+"----"+password.getPwd();
+        password.setPwd(decrypt);
         return passwordMapper.insert(password);
     }
 }
