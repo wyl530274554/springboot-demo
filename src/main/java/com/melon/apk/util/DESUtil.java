@@ -1,5 +1,7 @@
 package com.melon.apk.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -8,6 +10,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 import java.util.Base64;
 
+@Slf4j
 public class DESUtil {
 
     /**
@@ -89,6 +92,7 @@ public class DESUtil {
             return new String(sDecryptCipher.doFinal(decode), CHARSET);
         } catch (Exception e) {
             e.printStackTrace();
+            log.debug("error:" + e.getMessage());
             return data;
         }
     }

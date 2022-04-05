@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.melon.apk.entity.Password;
 import com.melon.apk.mapper.PasswordMapper;
 import com.melon.apk.util.DESUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequestMapping("/password")
 @RestController
 public class PasswordController {
@@ -72,7 +74,7 @@ public class PasswordController {
     @PostMapping
     public Object addPassword(Password password) {
         String decrypt = DESUtil.decrypt(password.getPwd());
-        String log = decrypt+"----"+password.getPwd();
+        log.debug("before: " + password.getPwd() + ", after: " + decrypt);
         password.setPwd(decrypt);
         return passwordMapper.insert(password);
     }
