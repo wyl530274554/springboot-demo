@@ -44,7 +44,7 @@ public class ApkController {
     @CrossOrigin
     @PostMapping("/apk")
     public Object insertApkVersion(Apk apk, MultipartFile apkFile) throws Exception {
-        File file = new File("/home/melon/file/"+apk.getName());
+        File file = new File("/home/melon/files"+apk.getName());
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(apkFile.getBytes());
         fileOutputStream.close();
